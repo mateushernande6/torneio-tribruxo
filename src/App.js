@@ -1,25 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import { Component } from "react";
+import "./App.css";
+import Students from './components/students/Students'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+
+  state = {
+    allStudents: [],
+
+  }
+
+  IAmFetch = () => {
+    fetch('https://hp-api.herokuapp.com/api/characters/students' )
+    .then(response => response.json())
+    .then(dados => {
+      this.setState({
+        allStudents: [...this.state.allStudents, ...dados]
+      })
+    })
+    .catch((err) => console.log(err))
+  }
+
+  componentDidMount(){
+    this.IAmFetch()
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <header className="App-header">
+          <Students getStudents={this.state.allStudents}/>
+        </header>
+      </div>
+    );
+  }
 }
 
 export default App;
